@@ -1,10 +1,13 @@
 import {useState, useEffect} from 'react';
 import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 const Vinyl = (props) => {
     const [artistName, setArtistName] = useState("")
     const [albumName, setAlbumName] = useState("")
     const [vinylInfo, setVinylInfo] = useState({})
+
+    let navigate = useNavigate()
 
     const params = useParams();
 
@@ -35,6 +38,16 @@ const Vinyl = (props) => {
           .catch(e => console.log(e))
       }
 
+      const handleDelete=() => {
+        fetch(`http://127.0.0.1:3000/vinyls/${params.id}`, {
+            method: "DELETE",
+            })
+            .then(() => {
+                
+                navigate("/", {replace: true})
+            })
+      }
+
     useEffect(() => {
         fetch(`http://127.0.0.1:3000/vinyls/${params.id}`) 
     .then(response => response.json())
@@ -48,8 +61,9 @@ const Vinyl = (props) => {
                 <input type="text" placeholder="albumname" value={albumName} onChange={albumHandleOnChange}/>
                 <input type="submit" value="update"/>
             </form>
-            <p>Artist Name: {vinylInfo.vinyls?vinylInfo.vinyls.artistName:"loading"}</p>
-            <p>Album Name: {vinylInfo.vinyls?vinylInfo.vinyls.albumName:"loading"}</p>
+            <p>Artist Name: {vinylInfo.vinyl?vinylInfo.vinyl.artistName:"loading"}</p>
+            <p>Album Name: {vinylInfo.vinyl?vinylInfo.vinyl.albumName:"loading"}</p>
+            <button onClick={handleDelete}>delete</button>
         </div>
     )
 }
