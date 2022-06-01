@@ -1,14 +1,16 @@
-import Vinyl from "./Vinyl";
+import {Link} from "react-router-dom"
 
 const VinylsView = (props) => {
 
     const vinyls = props.vinylData.map((value) => {
-        return <Vinyl data={value} key={value._id}/>
+       return(<li key={value._id}><Link to={`/${value._id}`}>{value.artistName}, {value.albumName}</Link> </li>)
     })
 
     return (
         <div>
-            {vinyls}
+            <ul>
+                {vinyls}
+            </ul>
         </div>
     )
 }

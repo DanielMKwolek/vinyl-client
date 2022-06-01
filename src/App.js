@@ -2,6 +2,7 @@ import './App.css';
 import {Routes, Route, Link, Navigate} from "react-router-dom";
 import {useState, useEffect} from "react";
 import VinylsView from './Components/VinylsView';
+import Vinyl from "./Components/Vinyl";
 
 function App() {
   const [artistName, setArtistName] = useState("")
@@ -51,7 +52,8 @@ function App() {
       </form>
       <main>
         <Routes>
-          <Route path="/" element={<VinylsView vinylData={vinylData}/>} />
+          <Route path="/:id" element={<Vinyl />} />
+          <Route path="/" element={<VinylsView vinylData={vinylData} />} />
         </Routes>
       </main>
     </div>
