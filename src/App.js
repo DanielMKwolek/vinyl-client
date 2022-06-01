@@ -1,12 +1,19 @@
 import './App.css';
 import {Routes, Route, Link, Navigate} from "react-router-dom";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import VinylsView from './Components/VinylsView';
 
 function App() {
-
   const [artistName, setArtistName] = useState("")
   const [albumName, setAlbumName] = useState("")
+  const [vinylData, setVinylData] = useState([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:3000/vinyls")
+      .then(response => response.json())
+      .then(data => setVinylData(data.vinyls))
+      .catch(e => console.log(e))
+  }, [])
 
   const artistHandleOnChange = (event) => {
     setArtistName(event.target.value)
@@ -16,7 +23,7 @@ function App() {
     setAlbumName(event.target.value)
   }
 
-  const handleOnSubmit= (event) => {
+  const handleOnSubmit = (event) => {
     event.preventDefault()
 
     fetch("http://127.0.0.1:3000/vinyls/", {
@@ -29,9 +36,10 @@ function App() {
         albumName: albumName
       })
     })
+      .then(() => fetch("http://127.0.0.1:3000/vinyls"))
       .then(response => response.json())
-      .then(vinylObj => console.log(vinylObj))
-      .catch(e => console.log(e));
+      .then(data => setVinylData(data.vinyls))
+      .catch(e => console.log(e))
   }
   
   return (
@@ -43,7 +51,7 @@ function App() {
       </form>
       <main>
         <Routes>
-          <Route path="/" element={<VinylsView />} />
+          <Route path="/" element={<VinylsView vinylData={vinylData}/>} />
         </Routes>
       </main>
     </div>
